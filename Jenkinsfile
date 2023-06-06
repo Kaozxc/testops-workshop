@@ -51,7 +51,6 @@ pipeline {
                         sh("docker-compose build --build-arg DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}")
                     }
                 }
-
             }
         }
 
@@ -64,19 +63,28 @@ pipeline {
 
                     }
                 }
-
             }
         }
 
         // run tests
 
         stage('Run tests') {
-            steps {
-                script {
-                    sh("echo 'hello'")
-
+            agent {
+                docker {
+                    image 'cypress/included:12.2.0'
+                    args '--network host --entrypoint=\'\''
                 }
-
+            }
+            steps {
+                dir('pipeline_ex/') { 
+                    script {
+                        try {
+                            sh 'CYPRESS_BASE_URL=localhost:3000 cypress run'
+                        } catch (err) {
+                            print(err)
+                        }
+                    }
+                }
             }
         }
     }
