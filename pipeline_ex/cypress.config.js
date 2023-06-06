@@ -8,7 +8,7 @@ const jenkinsBuildId = env.BUILD_ID || process.env.BUILD
 const testlink = new CypressTestlink(env);
 
 async function retrieveTestCasesForTestPlan() {
-    return 'tbd'
+    return testlink.retrieveTestCasesForTestPlan();
 }
 
 const resolvedConfig = retrieveTestCasesForTestPlan().then((testCases) => {
